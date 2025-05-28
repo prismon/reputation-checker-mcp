@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build: .
+    container_name: url-reputation-checker
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - MCP_SERVER_HOST=0.0.0.0
+      - MCP_SERVER_PORT=5000
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - mcp-network
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: url-reputation-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mcp-network
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+networks:
+  mcp-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local

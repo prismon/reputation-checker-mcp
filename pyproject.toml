@@ -1,0 +1,51 @@
+[project]
+name = "url-reputation-checker"
+version = "0.1.0"
+description = "URL validation and reputation checker using FASTMCP 2.0"
+authors = [{name = "URL Reputation Checker Team"}]
+requires-python = ">=3.9"
+dependencies = [
+    "fastmcp>=2.0.0",
+    "httpx>=0.25.0",
+    "beautifulsoup4>=4.12.0",
+    "python-whois>=0.8.0",
+    "validators>=0.22.0",
+    "redis>=5.0.0",
+    "waybackpy>=3.0.6",
+    "lxml>=4.9.0",
+    "python-dateutil>=2.8.2",
+    "tldextract>=5.0.0",
+    "aioredis>=2.0.1",
+    "certifi>=2023.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["url_reputation_checker"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
