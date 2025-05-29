@@ -9,6 +9,6 @@ echo "=============================================="
 # Export Redis URL to use local Redis
 export REDIS_URL=${REDIS_URL:-redis://localhost:6379}
 
-# Run the server
+# Run the server with proper signal handling
 cd "$(dirname "$0")"
-python3 -m url_reputation_checker.server
+exec python3 -m url_reputation_checker

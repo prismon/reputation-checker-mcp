@@ -31,5 +31,5 @@ ENV PYTHONUNBUFFERED=1
 ENV MCP_SERVER_HOST=0.0.0.0
 ENV MCP_SERVER_PORT=5000
 
-# Run the MCP server
-CMD ["python", "-m", "url_reputation_checker.server"]
+# Run the MCP server with proper signal handling
+CMD ["python", "-m", "url_reputation_checker"]
