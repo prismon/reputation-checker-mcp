@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional, Any
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ConfidenceLevel(str, Enum):
@@ -21,7 +21,7 @@ class ValidationLevel(str, Enum):
 @dataclass
 class URLValidationResult:
     """Result of URL validation and reputation check."""
-    
+
     url: str
     is_valid: bool
     status_code: int
@@ -35,7 +35,7 @@ class URLValidationResult:
     confidence_level: ConfidenceLevel = ConfidenceLevel.LOW
     warnings: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -46,7 +46,9 @@ class URLValidationResult:
             "content_length": self.content_length,
             "ssl_valid": self.ssl_valid,
             "domain_age_days": self.domain_age_days,
-            "first_seen_date": self.first_seen_date.isoformat() if self.first_seen_date else None,
+            "first_seen_date": (
+                self.first_seen_date.isoformat() if self.first_seen_date else None
+            ),
             "wayback_snapshots": self.wayback_snapshots,
             "reputation_score": self.reputation_score,
             "confidence_level": self.confidence_level.value,
@@ -58,7 +60,7 @@ class URLValidationResult:
 @dataclass
 class DomainHistory:
     """Historical information about a domain."""
-    
+
     domain: str
     creation_date: Optional[datetime] = None
     expiration_date: Optional[datetime] = None
@@ -67,17 +69,27 @@ class DomainHistory:
     wayback_total_snapshots: int = 0
     ssl_first_seen: Optional[datetime] = None
     age_days: Optional[int] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
             "domain": self.domain,
-            "creation_date": self.creation_date.isoformat() if self.creation_date else None,
-            "expiration_date": self.expiration_date.isoformat() if self.expiration_date else None,
+            "creation_date": (
+                self.creation_date.isoformat() if self.creation_date else None
+            ),
+            "expiration_date": (
+                self.expiration_date.isoformat() if self.expiration_date else None
+            ),
             "registrar": self.registrar,
-            "wayback_first_snapshot": self.wayback_first_snapshot.isoformat() if self.wayback_first_snapshot else None,
+            "wayback_first_snapshot": (
+                self.wayback_first_snapshot.isoformat()
+                if self.wayback_first_snapshot
+                else None
+            ),
             "wayback_total_snapshots": self.wayback_total_snapshots,
-            "ssl_first_seen": self.ssl_first_seen.isoformat() if self.ssl_first_seen else None,
+            "ssl_first_seen": (
+                self.ssl_first_seen.isoformat() if self.ssl_first_seen else None
+            ),
             "age_days": self.age_days,
         }
 
@@ -85,7 +97,7 @@ class DomainHistory:
 @dataclass
 class LinkExtractionResult:
     """Result of link extraction from content."""
-    
+
     extracted_links: List[str]
     valid_links: List[URLValidationResult]
     invalid_links: List[str]
@@ -93,7 +105,7 @@ class LinkExtractionResult:
     valid_count: int
     invalid_count: int
     average_reputation_score: float
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -106,9 +118,9 @@ class LinkExtractionResult:
                 "invalid_count": self.invalid_count,
                 "average_reputation_score": self.average_reputation_score,
                 "recommendation": self._get_recommendation(),
-            }
+            },
         }
-    
+
     def _get_recommendation(self) -> str:
         """Generate recommendation based on results."""
         if self.average_reputation_score >= 80:
