@@ -204,7 +204,7 @@ async def get_domain_history(domain: str) -> Dict:
     return result
 
 
-@mcp.resource("url_validation_report")
+@mcp.resource("report://validation")
 async def get_validation_report() -> str:
     """Return a formatted report of all validated URLs."""
     if not validation_history:
@@ -238,25 +238,13 @@ async def get_validation_report() -> str:
     return report
 
 
-@mcp.resource("cache_stats")
+@mcp.resource("stats://cache")
 async def get_cache_stats() -> Dict:
     """Get cache statistics."""
     return await cache_manager.get_stats()
 
 
-# Server lifecycle hooks
-@mcp.server.on_start()
-async def on_start():
-    """Initialize server resources."""
-    await cache_manager.connect()
-    print("URL Reputation Checker started successfully")
-
-
-@mcp.server.on_stop()
-async def on_stop():
-    """Cleanup server resources."""
-    await cache_manager.disconnect()
-    print("URL Reputation Checker stopped")
+# Cache manager will connect lazily on first use
 
 
 if __name__ == "__main__":

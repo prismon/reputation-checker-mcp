@@ -5,8 +5,7 @@ import hashlib
 from typing import Optional, Any, Dict
 from datetime import datetime, timedelta
 
-import aioredis
-from aioredis import Redis
+from redis.asyncio import Redis
 
 
 class CacheManager:
@@ -22,11 +21,16 @@ class CacheManager:
     async def connect(self):
         """Connect to Redis."""
         try:
-            self.redis = await aioredis.from_url(self.redis_url)
+            self.redis = Redis.from_url(self.redis_url)
             await self.redis.ping()
         except Exception:
             # If Redis is not available, caching will be disabled
             self.redis = None
+    
+    async def _ensure_connected(self):
+        """Ensure we're connected to Redis."""
+        if self.redis is None:
+            await self.connect()
     
     async def disconnect(self):
         """Disconnect from Redis."""
@@ -111,6 +115,7 @@ class CacheManager:
     
     async def get_stats(self) -> Dict[str, int]:
         """Get cache statistics."""
+        await self._ensure_connected()
         if not self.redis:
             return {"enabled": False}
         
@@ -129,6 +134,7 @@ class CacheManager:
     
     async def clear_cache(self):
         """Clear all cache entries."""
+        await self._ensure_connected()
         if not self.redis:
             return
         

@@ -3,7 +3,7 @@
 help:
 	@echo "Available commands:"
 	@echo "  make build       - Build Docker image"
-	@echo "  make run         - Run services with docker-compose"
+	@echo "  make run         - Run services with docker compose"
 	@echo "  make stop        - Stop all services"
 	@echo "  make clean       - Stop services and remove volumes"
 	@echo "  make test        - Run tests"
@@ -12,18 +12,18 @@ help:
 	@echo "  make dev-install - Install development dependencies"
 
 build:
-	docker-compose build
+	docker compose build
 
 run:
-	docker-compose up -d
+	docker compose up -d
 	@echo "URL Reputation Checker is running at http://localhost:5000"
 	@echo "Redis is running at localhost:6379"
 
 stop:
-	docker-compose down
+	docker compose down
 
 clean:
-	docker-compose down -v
+	docker compose down -v
 	rm -rf __pycache__ .pytest_cache .mypy_cache
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
@@ -42,10 +42,10 @@ dev-install:
 	pip install -e ".[dev]"
 
 logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 restart:
-	docker-compose restart mcp-server
+	docker compose restart mcp-server
 
 redis-cli:
 	docker exec -it url-reputation-redis redis-cli
