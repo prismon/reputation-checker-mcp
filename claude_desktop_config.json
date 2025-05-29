@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "url-reputation-checker": {
+      "command": "python3",
+      "args": ["-m", "url_reputation_checker.server"],
+      "cwd": "/home/josh/Projects/reputation-and-validity-checker",
+      "env": {
+        "REDIS_URL": "redis://localhost:6379",
+        "PYTHONPATH": "/home/josh/Projects/reputation-and-validity-checker"
+      }
+    }
+  }
+}
